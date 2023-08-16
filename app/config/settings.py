@@ -1,3 +1,4 @@
+from os import environ
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -12,9 +13,9 @@ dotenv_path = Path(ENV_DIR / '.env').resolve()
 load_dotenv(dotenv_path=dotenv_path)
 
 # Base setting
-DEBUG = True
-SECRET_KEY = ''
-ALLOWED_HOSTS = []
+DEBUG = environ['DJANGO_DEBUG']
+SECRET_KEY = environ['DJANGO_SECRET_KEY']
+ALLOWED_HOSTS = environ['DJANGO_ALLOWED_HOSTS'].split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -28,7 +29,6 @@ INSTALLED_APPS = [
     # Third party apps
 
     # My apps
-
 ]
 
 MIDDLEWARE = [
@@ -61,15 +61,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -86,7 +84,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
