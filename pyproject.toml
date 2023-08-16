@@ -34,3 +34,11 @@ flake8-quotes = "^3.3.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.yapfignore]
+ignore_patterns = [
+  ".venv/*",
+  "pytest_",
+  "**/migrations/*",
+  "app/manage.py",
+]
