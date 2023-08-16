@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # Third party apps
 
     # My apps
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
