@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "python-dev-test-task"
+version = "0.1.0"
+description = "Test task for python developer role at Skyeng"
+authors = ["mrKazzila <mrkazzila@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+psycopg2-binary = "^2.9.5"
+celery = "^5.2.7"
+flower = "^2.0.0"
+django = "^4.2.4"
+django-redis = "^5.2.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-django = "^4.5.2"
+pre-commit = "^3.3.0"
+yapf = "^0.32.0"
+toml = "^0.10.2"
+bandit = "^1.7.5"
+pep8-naming = "^0.13.3"
+flake8 = "^6.0.0"
+flake8-bugbear = "^23.5.9"
+flake8-builtins = "^2.1.0"
+flake8-commas = "^2.1.0"
+flake8-import-order = "^0.18.2"
+flake8-quotes = "^3.3.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
