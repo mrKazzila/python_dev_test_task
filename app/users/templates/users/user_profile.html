@@ -1,0 +1,8 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>User Profile</h1>
+    <p>USER: {{ user.id }}</p>
+    <p>Email: {{ user.email }}</p>
+{% endblock %}
