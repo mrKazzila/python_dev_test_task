@@ -3,4 +3,5 @@ exclude_dirs: [
   '*/migrations/*',
   '*/tests/*',
   '*/tests.py',
+  '../app/media/',
 ]
