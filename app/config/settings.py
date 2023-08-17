@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     # My apps
     'users.apps.UsersConfig',
+    'common.apps.CommonConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,8 +66,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': environ['DATABASE_ENGINE'],
+        'NAME': environ['DATABASE_NAME'],
+        'USER': environ['DATABASE_USER'],
+        'PASSWORD': environ['DATABASE_PASSWORD'],
+        'HOST': environ['DATABASE_HOST'],
+        'PORT': environ['DATABASE_PORT'],
     },
 }
 
@@ -86,6 +91,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.User'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -93,7 +104,17 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = ROOT_DIR / 'static'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Users
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
+LOGIN_URL = '/users/signin/'
+LOGIN_REDIRECT_URL = '/index/'
+LOGOUT_REDIRECT_URL = '/users/signin/'
+
+SITE_ID = 1
