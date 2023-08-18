@@ -1,52 +1,58 @@
-from django.shortcuts import redirect, render
+import datetime
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
+from django.views import View
+
 from .forms import FileUploadForm
-from .models import UploadedFile, user_directory_path
+from .models import UploadedFile
 
 
-@login_required
-def upload_file(request):
-    print(request.method)
-    if request.method == 'POST':
+class FileManagementView(LoginRequiredMixin, View):
+    template_name = 'code_files/file_list.html'
+
+    def get(self, request):
+        if request.user.id is None:
+            return redirect('users:signin')
+
+        form = FileUploadForm()
+        files = UploadedFile.objects.filter(user=request.user).order_by('is_checked', '-is_new', 'uploaded_at')
+        return render(request, self.template_name, {'files': files, 'form': form})
+
+    def post(self, request):
         form = FileUploadForm(request.POST, request.FILES)
 
-        print(f'{form}')
-        print(f'{form.files}')
-
-        file_name = str(form.cleaned_data['file'].name)
-        print(f'{file_name}')
-
-        if form.is_valid() and file_name.endswith('.py'):
+        if form.is_valid() and form.cleaned_data['file'].name.endswith('.py'):
+            file_name = str(form.cleaned_data['file'].name)
             owner_id = request.user.id
-            file_path = user_directory_path(request, file_name)
 
-            is_exist_file = UploadedFile.objects.filter(user=owner_id, file__exact=file_path).first()
+            is_exist_file = UploadedFile.objects.filter(user=owner_id, filename__exact=file_name).first()
 
             if is_exist_file:
-                is_exist_file.file = file_name
-                is_exist_file.is_new = False
-                is_exist_file.save()
+                new_uploaded_file = form.save(commit=False)
+                new_uploaded_file.user = request.user
+                new_uploaded_file.is_new = False
+                new_uploaded_file.filename = file_name
+                new_uploaded_file.is_checked = False
+                new_uploaded_file.uploaded_at = datetime.datetime.now()
+                is_exist_file.delete()
+                new_uploaded_file.save()
             else:
                 new_uploaded_file = form.save(commit=False)
                 new_uploaded_file.user = request.user
                 new_uploaded_file.is_new = True
                 new_uploaded_file.filename = file_name
+                new_uploaded_file.is_checked = False
                 new_uploaded_file.save()
 
             return redirect('code_files:file_list')
         else:
-            error_message = 'Only files with the extension are allowed .py'
+            error_message = 'Only files with the extension .py are allowed'
             form.add_error('file', error_message)
-    else:
-        form = FileUploadForm()
 
-    return render(request, 'code_files/upload.html', {'form': form})
-
-
-def file_list(request):
-    files = UploadedFile.objects.filter(user=request.user)
-    print(files)
-    return render(request, 'code_files/file_list.html', {'files': files})
+        files = UploadedFile.objects.filter(user=request.user)
+        return render(request, self.template_name, {'files': files, 'form': form})
 
 
 @login_required
