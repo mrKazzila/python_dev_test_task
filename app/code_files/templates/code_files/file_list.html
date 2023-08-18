@@ -1,0 +1,93 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+<br>
+<br>
+<br>
+{% if user.is_authenticated %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Downloaded files</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>File name</th>
+                        <th>Status</th>
+                        <th>Code check</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if page_obj %}
+                        {% for file in page_obj %}
+                            <tr>
+                                <td>{{ file.filename }}</td>
+                                <td>
+                                    {% if file.is_new %}
+                                        <span class="text-success">New</span>
+                                    {% else %}
+                                        <span class="text-warning">Overwritten</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not file.is_checked %}
+                                        <span class="text-danger">Unchecked</span>
+                                    {% else %}
+                                        <span class="text-info">Checked. <a href="{% url 'code_files:delete_file' file.id %}">Report available</a></span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'code_files:delete_file' file.id %}" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-muted">No files</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            {% if page_obj %}
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1" class="btn btn-primary">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+            <h2>Download the file</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button name="submit" type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% else %}
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'users:signin' %}">Log in <i class="fas fa-sign-in-alt"></i></a>
+</li>
+{% endif %}
+
+<br>
+<br>
+{% endblock %}
