@@ -1,0 +1,89 @@
+version: '3'
+
+services:
+  django:
+    container_name: local-code-checker
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - env/.env
+    command: sh -c "
+      python app/manage.py makemigrations &&
+      python app/manage.py migrate &&
+      python app/manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+       - ./persistentdata/static:/home/unprivilegeduser/code/app/static
+       - ./persistentdata/media:/home/unprivilegeduser/code/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - celery-worker
+      - celery-beat
+
+  postgres:
+    container_name: local-postgres-15.3-2
+    image: postgres:15.3
+    env_file:
+      - env/.env.db
+    volumes:
+       - ./persistentdata/db:/var/lib/postgresql/data/
+
+  redis:
+    container_name: local-redis-7.0.5-alpine
+    image: redis:7.0.5-alpine
+    hostname: redis
+
+  celery-worker:
+    container_name: local-celery-worker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - env/.env
+    environment:
+      - REDIS_HOST=redis
+    entrypoint: celery
+    command: --workdir=./app -A config worker --loglevel=info
+    volumes:
+      - ./persistentdata/static:/home/unprivilegeduser/code/app/static
+      - ./persistentdata/media:/home/unprivilegeduser/code/app/media
+    depends_on:
+      - redis
+
+  celery-beat:
+    container_name: local-celery-beat
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - env/.env
+    environment:
+      - REDIS_HOST=redis
+    entrypoint: celery
+    command: --workdir=./app -A config beat -l info
+    volumes:
+      - ./persistentdata/static:/home/unprivilegeduser/code/app/static
+      - ./persistentdata/media:/home/unprivilegeduser/code/app/media
+    depends_on:
+      - redis
+
+  flower:
+    container_name: local-flower
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: flower
+    entrypoint: celery
+    command: --workdir=./app -A config flower
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
