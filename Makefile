@@ -43,3 +43,9 @@ test:
 test_linters:
 	pre-commit install
 	pre-commit run --all-files
+
+docker_run:
+	docker-compose -f docker-compose.yaml up -d --build
+
+docker_stop:
+	docker-compose -f docker-compose.yaml down -v
