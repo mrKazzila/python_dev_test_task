@@ -1,10 +1,10 @@
 from django.urls import path
-from . import views
+
+from .views import FileManagementView, delete_file
 
 app_name = 'code_files'
 
 urlpatterns = [
-    path('upload/', views.upload_file, name='upload_file'),
-    path('list/', views.file_list, name='file_list'),
-    path('delete/<int:file_id>/', views.delete_file, name='delete_file'),
+    path('list/', FileManagementView.as_view(), name='file_list'),
+    path('delete/<int:file_id>/', delete_file, name='delete_file'),
 ]
