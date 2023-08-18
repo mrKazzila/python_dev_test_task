@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 
 
 class TitleMixin:
-    """Common mixin for generate page title"""
+    """Common mixin for generate page title."""
 
     title = None
 
@@ -13,7 +13,7 @@ class TitleMixin:
 
 
 class IndexView(TitleMixin, TemplateView):
-    """Main page"""
+    """Main page."""
 
     template_name = 'common/index.html'
     title = 'CodeReview'

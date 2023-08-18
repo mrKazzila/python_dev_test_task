@@ -167,14 +167,14 @@ files = [
 
 [[package]]
 name = "click"
-version = "8.1.6"
+version = "8.1.7"
 description = "Composable command line interface toolkit"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "click-8.1.6-py3-none-any.whl", hash = "sha256:fa244bb30b3b5ee2cae3da8f55c9e5e0c0e86093306301fb418eb9dc40fbded5"},
-    {file = "click-8.1.6.tar.gz", hash = "sha256:48ee849951919527a045bfe3bf7baa8a959c423134e1a5b98c05c20ba75a1cbd"},
+    {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
+    {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
 ]
 
 [package.dependencies]
@@ -245,6 +245,21 @@ files = [
 ]
 
 [[package]]
+name = "diff-match-patch"
+version = "20230430"
+description = "Diff Match and Patch"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "diff-match-patch-20230430.tar.gz", hash = "sha256:953019cdb9c9d2c9e47b5b12bcff3cf4746fc4598eb406076fa1fc27e6a1f15c"},
+    {file = "diff_match_patch-20230430-py3-none-any.whl", hash = "sha256:dce43505fb7b1b317de7195579388df0746d90db07015ed47a85e5e44930ef93"},
+]
+
+[package.extras]
+dev = ["attribution (==1.6.2)", "black (==23.3.0)", "flit (==3.8.0)", "mypy (==1.2.0)", "ufmt (==2.1.0)", "usort (==1.0.6)"]
+
+[[package]]
 name = "distlib"
 version = "0.3.7"
 description = "Distribution utilities"
@@ -276,6 +291,18 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-crispy-forms"
+version = "1.14.0"
+description = "Best way to have Django DRY forms"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django-crispy-forms-1.14.0.tar.gz", hash = "sha256:35887b8851a931374dd697207a8f56c57a9c5cb9dbf0b9fa54314da5666cea5b"},
+    {file = "django_crispy_forms-1.14.0-py3-none-any.whl", hash = "sha256:bc4d2037f6de602d39c0bc452ac3029d1f5d65e88458872cc4dbc01c3a400604"},
+]
 
 [[package]]
 name = "django-redis"
@@ -462,14 +489,14 @@ gitdb = ">=4.0.1,<5"
 
 [[package]]
 name = "humanize"
-version = "4.7.0"
+version = "4.8.0"
 description = "Python humanize utilities"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "humanize-4.7.0-py3-none-any.whl", hash = "sha256:df7c429c2d27372b249d3f26eb53b07b166b661326e0325793e0a988082e3889"},
-    {file = "humanize-4.7.0.tar.gz", hash = "sha256:7ca0e43e870981fa684acb5b062deb307218193bca1a01f2b2676479df849b3a"},
+    {file = "humanize-4.8.0-py3-none-any.whl", hash = "sha256:8bc9e2bb9315e61ec06bf690151ae35aeb65651ab091266941edf97c90836404"},
+    {file = "humanize-4.8.0.tar.gz", hash = "sha256:9783373bf1eec713a770ecaa7c2d7a7902c98398009dfa3d8a2df91eec9311e8"},
 ]
 
 [package.extras]
@@ -1176,4 +1203,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "39d0ff74e08c96fd3798b848b740472da2ba1c2f2d035d395c8c5bf55bc260f2"
+content-hash = "e71544763e3103ebf6ede07b10bf45f188b2c4ed53b6b083bd2a0530c9d0ee1e"

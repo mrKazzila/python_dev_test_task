@@ -27,10 +27,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party apps
+    'crispy_forms',
 
     # My apps
-    'users.apps.UsersConfig',
     'common.apps.CommonConfig',
+    'users.apps.UsersConfig',
+    'code_files.apps.CodeFilesConfig',
 ]
 
 MIDDLEWARE = [
@@ -48,7 +50,11 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'common',
+            BASE_DIR / 'users',
+            BASE_DIR / 'code_files',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,6 +114,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = ROOT_DIR / 'static'
 STATICFILES_DIRS = (BASE_DIR / 'static',)
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -118,3 +127,5 @@ LOGIN_REDIRECT_URL = '/index/'
 LOGOUT_REDIRECT_URL = '/users/signin/'
 
 SITE_ID = 1
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

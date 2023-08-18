@@ -6,6 +6,7 @@ inline-quotes = '
 exclude =
     ../.venv,
     ../**/migrations/*,
+    ../app/media/*,
     ../app/manage.py,
 
 ignore =

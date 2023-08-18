@@ -9,6 +9,7 @@ urlpatterns = [
     path('enter_admin/', admin.site.urls, name='enter_admin'),
     path('', IndexView.as_view(), name='index'),
     path('users/', include('users.urls', namespace='users')),
+    path('files/', include('code_files.urls', namespace='code_files')),
 ]
 
 urlpatterns.extend(

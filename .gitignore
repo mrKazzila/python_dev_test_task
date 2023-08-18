@@ -42,3 +42,4 @@ env/*
 
 # Project ignore
 persistentdata/
+/app/media/

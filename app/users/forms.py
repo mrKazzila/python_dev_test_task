@@ -7,7 +7,7 @@ from .models import User
 
 
 class UserSignInForm(AuthenticationForm):
-    """Form for Login"""
+    """Form for Login."""
 
     def __init__(self, *args, **kwargs):  # noqa
         super().__init__(*args, **kwargs)
