@@ -21,26 +21,28 @@
                 </thead>
                 <tbody>
                     {% if page_obj %}
-                        {% for file in page_obj %}
+                        {% for file, code_check in page_obj %}
                             <tr>
                                 <td>{{ file.filename }}</td>
+
                                 <td>
-                                    {% if file.is_new %}
-                                        <span class="text-success">New</span>
+                                    <span class="text-success">{{ file.state }}</span>
+                                </td>
+
+                                <td>
+                                    {% if code_check.status == "Checked" %}
+                                        <span class="text-danger">Checked
+                                            <a href="{% url 'code_files:delete_file' file.id %}">Report available</a>
+                                        </span>
                                     {% else %}
-                                        <span class="text-warning">Overwritten</span>
+                                        <span class="text-warning">{{ code_check.status }}</span>
                                     {% endif %}
                                 </td>
-                                <td>
-                                    {% if not file.is_checked %}
-                                        <span class="text-danger">Unchecked</span>
-                                    {% else %}
-                                        <span class="text-info">Checked. <a href="{% url 'code_files:delete_file' file.id %}">Report available</a></span>
-                                    {% endif %}
-                                </td>
+
                                 <td>
                                     <a href="{% url 'code_files:delete_file' file.id %}" class="btn btn-danger">Delete</a>
                                 </td>
+
                             </tr>
                         {% endfor %}
                     {% else %}
@@ -50,9 +52,11 @@
                     {% endif %}
                 </tbody>
             </table>
+
             {% if page_obj %}
                 <div class="pagination">
                     <span class="step-links">
+
                         {% if page_obj.has_previous %}
                             <a href="?page=1" class="btn btn-primary">&laquo; first</a>
                             <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">previous</a>
@@ -66,28 +70,29 @@
                             <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">next</a>
                             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">last &raquo;</a>
                         {% endif %}
+
                     </span>
                 </div>
             {% endif %}
+
         </div>
 
         <div class="col-md-4">
             <h2>Download the file</h2>
+
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button name="submit" type="submit" class="btn btn-primary">Upload</button>
             </form>
+
         </div>
 
     </div>
 </div>
 {% else %}
     <li class="nav-item">
-    <a class="nav-link" href="{% url 'users:signin' %}">Log in <i class="fas fa-sign-in-alt"></i></a>
-</li>
+        <a class="nav-link" href="{% url 'users:signin' %}">Log in <i class="fas fa-sign-in-alt"></i></a>
+    </li>
 {% endif %}
-
-<br>
-<br>
 {% endblock %}
