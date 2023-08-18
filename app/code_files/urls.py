@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import DeleteFileView, FileManagementView
+from code_files.views import DeleteFileView, FileManagementView
 
 app_name = 'code_files'
 

@@ -1,12 +1,16 @@
 from django.db import models
+
 from users.models import User
 
 
 def user_directory_path(instance, filename):
+    """Create folder for user files."""
     return f'user_{instance.user.id}/code/{filename}'
 
 
 class UploadedFile(models.Model):
+    """Upload file model."""
+
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,

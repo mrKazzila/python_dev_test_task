@@ -3,6 +3,7 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
+    """User manager."""
 
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -28,6 +29,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """User model."""
+
     email = models.EmailField(verbose_name='Email', unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

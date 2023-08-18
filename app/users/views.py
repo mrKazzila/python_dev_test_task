@@ -10,7 +10,7 @@ from .models import User
 
 
 class UserSignUpView(SuccessMessageMixin, CreateView):
-    """Registration page"""
+    """Registration page."""
 
     model = User
     form_class = UserSignUpForm
@@ -24,7 +24,7 @@ class UserSignUpView(SuccessMessageMixin, CreateView):
 
 
 class UserSignInView(LoginView):
-    """Login page"""
+    """Login page."""
 
     template_name = 'users/signin.html'
     authentication_form = UserSignInForm
@@ -35,6 +35,8 @@ class UserSignInView(LoginView):
 
 
 class UserProfileView(LoginRequiredMixin, DetailView):
+    """User profile page."""
+
     model = User
     template_name = 'users/user_profile.html'
 
