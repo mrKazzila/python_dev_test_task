@@ -1,12 +1,12 @@
-import datetime
+from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from django.views import View
 
-from .forms import FileUploadForm
-from .models import UploadedFile
+from code_files.forms import FileUploadForm
+from code_files.models import UploadedFile
 
 
 class FileManagementView(LoginRequiredMixin, View):
@@ -17,8 +17,13 @@ class FileManagementView(LoginRequiredMixin, View):
             return redirect('users:signin')
 
         form = FileUploadForm()
-        files = UploadedFile.objects.filter(user=request.user).order_by('is_checked', '-is_new', 'uploaded_at')
-        return render(request, self.template_name, {'files': files, 'form': form})
+        files = UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-is_checked', '-is_new')
+
+        paginator = Paginator(files, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {'page_obj': page_obj, 'form': form})
 
     def post(self, request):
         form = FileUploadForm(request.POST, request.FILES)
@@ -35,7 +40,7 @@ class FileManagementView(LoginRequiredMixin, View):
                 new_uploaded_file.is_new = False
                 new_uploaded_file.filename = file_name
                 new_uploaded_file.is_checked = False
-                new_uploaded_file.uploaded_at = datetime.datetime.now()
+                new_uploaded_file.uploaded_at = datetime.now()
                 is_exist_file.delete()
                 new_uploaded_file.save()
             else:
@@ -55,10 +60,11 @@ class FileManagementView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'files': files, 'form': form})
 
 
-@login_required
-def delete_file(request, file_id):
-    uploaded_file = UploadedFile.objects.get(pk=file_id)
-    if uploaded_file.user == request.user:
-        uploaded_file.delete()
+class DeleteFileView(LoginRequiredMixin, View):
 
-    return redirect('code_files:file_list')
+    def get(self, request, file_id):
+        uploaded_file = UploadedFile.objects.get(pk=file_id)
+        if uploaded_file.user == request.user:
+            uploaded_file.delete()
+
+        return redirect('code_files:file_list')
