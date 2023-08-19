@@ -27,19 +27,29 @@
                     {% if page_obj %}
                         {% for file, code_check in page_obj %}
                             <tr>
-                                <td>{{ file.filename }}</td>
-
                                 <td>
-                                    <span class="text-success">{{ file.state }}</span>
+                                    <span class="text-dark">{{ file.filename }}</span>
                                 </td>
 
                                 <td>
-                                    {% if code_check.status == "Checked" %}
-                                        <span class="text-danger">Checked
-                                            <a href="{% url 'code_files:delete_file' file.id %}">Report available</a>
-                                        </span>
+                                    {% if file.state == "New" %}
+                                        <span class="text-danger">{{ file.state }}</span>
+                                    {% elif file.state == "Overwritten" %}
+                                        <span class="text-warning">{{ file.state }}</span>
                                     {% else %}
+                                        <span class="text-success">{{ file.state }}</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if code_check.status == "Done" %}
+                                        <span class="text-success">
+                                            <a href="#" class="btn btn-info">Report available</a>
+                                        </span>
+                                    {% elif code_check.status == "In checking" %}
                                         <span class="text-warning">{{ code_check.status }}</span>
+                                    {% else %}
+                                        <span class="text-danger">{{ code_check.status }}</span>
                                     {% endif %}
                                 </td>
 
