@@ -3,27 +3,30 @@ from django.shortcuts import redirect, render
 from django.views import View
 
 from code_files.code_files_services import (
+    add_new_file,
     create_files_with_check_status,
     create_paginator_obj,
     delete_file,
-    file_manager,
     return_old_file_name_if_file_exist,
+    update_exist_file,
 )
 from code_files.forms import FileUploadForm
 from code_files.models import UploadedFile
+from common.views import TitleMixin
 
 
-class FileManagementView(LoginRequiredMixin, View):
+class FileManagementView(TitleMixin, LoginRequiredMixin, View):
     """View for managing user's uploaded files."""
 
     template_name = 'code_files/file_list.html'
+    title = 'Flake review - user files'
 
     def get(self, request):
         if request.user.id is None:
             return redirect('users:signin')
 
         form = FileUploadForm()
-        files = UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-state')
+        files = (UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-state'))
 
         files_with_checks = create_files_with_check_status(files=files)
         page_obj = create_paginator_obj(files=files_with_checks, page_number=request.GET.get('page'))
@@ -50,12 +53,10 @@ class FileManagementView(LoginRequiredMixin, View):
                 file_name=file_name,
             )
 
-            file_manager(
-                form=form,
-                new_file_name=file_name,
-                user=request.user,
-                old_file=old_file_name,
-            )
+            if old_file_name:
+                update_exist_file(old_file=old_file_name)
+            else:
+                add_new_file(form=form, user=request.user, new_file_name=file_name)
 
             return redirect('code_files:file_list')
         else:
