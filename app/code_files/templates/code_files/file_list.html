@@ -1,6 +1,10 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
+{% block css %}
+    <link href="{% static 'css/file_list.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <br>
 <br>
@@ -58,8 +62,8 @@
                     <span class="step-links">
 
                         {% if page_obj.has_previous %}
-                            <a href="?page=1" class="btn btn-primary">&laquo; first</a>
-                            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">previous</a>
+                            <a href="?page=1" id="my-paginator-first-btn">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}" id="my-paginator-previous-btn">previous</a>
                         {% endif %}
 
                         <span class="current">
@@ -67,8 +71,8 @@
                         </span>
 
                         {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">next</a>
-                            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">last &raquo;</a>
+                            <a href="?page={{ page_obj.next_page_number }}" id="my-paginator-next-btn">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}" id="my-paginator-last-btn">last &raquo;</a>
                         {% endif %}
 
                     </span>
@@ -83,7 +87,9 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button name="submit" type="submit" class="btn btn-primary">Upload</button>
+                <button name="submit" type="submit" id="my-upload-file-btn">
+                    Upload
+                </button>
             </form>
 
         </div>

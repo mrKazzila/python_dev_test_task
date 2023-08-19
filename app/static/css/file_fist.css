@@ -1,0 +1,9 @@
+#my-upload-file-btn,
+#my-paginator-first-btn,
+#my-paginator-next-btn,
+#my-paginator-previous-btn,
+#my-paginator-last-btn, {
+    background-color: #23364e;
+    border-color: #23364e;
+    color: white;
+}
