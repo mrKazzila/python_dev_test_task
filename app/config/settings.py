@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'common.apps.CommonConfig',
     'users.apps.UsersConfig',
     'code_files.apps.CodeFilesConfig',
+    'code_checker.apps.CodeCheckerConfig',
 ]
 
 MIDDLEWARE = [
