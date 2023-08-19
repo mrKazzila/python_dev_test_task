@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 
 from code_files.code_files_services import (
+    create_files_with_check_status,
     create_paginator_obj,
     delete_file,
     file_manager,
@@ -22,10 +23,19 @@ class FileManagementView(LoginRequiredMixin, View):
             return redirect('users:signin')
 
         form = FileUploadForm()
-        files = UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-is_checked', '-is_new')
-        page_obj = create_paginator_obj(files=files, page_number=request.GET.get('page'))
+        files = UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-state')
 
-        return render(request, self.template_name, {'page_obj': page_obj, 'form': form})
+        files_with_checks = create_files_with_check_status(files=files)
+        page_obj = create_paginator_obj(files=files_with_checks, page_number=request.GET.get('page'))
+
+        return render(
+            request=request,
+            template_name=self.template_name,
+            context={
+                'page_obj': page_obj,
+                'form': form,
+            },
+        )
 
     def post(self, request):
         form = FileUploadForm(request.POST, request.FILES)
@@ -53,7 +63,15 @@ class FileManagementView(LoginRequiredMixin, View):
             form.add_error('file', error_message)
 
         files = UploadedFile.objects.filter(user=request.user)
-        return render(request, self.template_name, {'files': files, 'form': form})
+
+        return render(
+            request=request,
+            template_name=self.template_name,
+            context={
+                'files': files,
+                'form': form,
+            },
+        )
 
 
 class DeleteFileView(LoginRequiredMixin, View):

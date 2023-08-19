@@ -1,6 +1,10 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
+{% block css %}
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row justify-content-center">
@@ -9,7 +13,7 @@
                 <p class="text-center">USER: {{ user.id }}</p>
                 <p class="text-center">Email: {{ user.email }}</p>
                 <div class="text-center">
-                    <a href="{% url 'code_files:file_list' %}" class="btn btn-primary btn-lg">К файлам</a>
+                    <a href="{% url 'code_files:file_list' %}" class="btn btn-primary btn-lg">To the files</a>
                 </div>
             </div>
         </div>

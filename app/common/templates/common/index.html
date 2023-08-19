@@ -1,26 +1,30 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
-
 {% block css %}
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
 {% endblock %}
 
-
 {% block content %}
-    <section>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <h1 class="mt-5">Store</h1>
-                <p>
-                    New images and the best brands on Store.
-                    Free shipping worldwide! Outlet: up to -70% Own brand. -20% to new customers.
-                </p>
-                <button id="start-purchase-btn" type="button" class="btn btn-lg">
-                </button>
+    <section class="text-center my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <h1 class="mt-5">Flake review</h1>
+                    <p>
+                        Check your code with the online web version of flake8.
+                    </p>
+                    {% if user.is_authenticated %}
+                        <button id="start-review-btn" type="button" class="btn btn-lg btn-primary">
+                            <a href="{% url 'code_files:file_list' %}" id="start-review-link">To the files</a>
+                        </button>
+                    {% else %}
+                        <button id="main-sign-in-btn" type="button" class="btn btn-lg btn-primary">
+                            <a href="{% url 'users:signin' %}" id="main-sign-in-link">Sign in</a>
+                        </button>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock %}

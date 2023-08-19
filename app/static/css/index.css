@@ -7,13 +7,13 @@ body {
     padding-top: 56px;
 }
 
-#start-purchase-btn {
+#start-review-btn, #main-sign-in-btn {
     background-color: #23364e;
     border-color: #23364e;
     color: white;
 }
 
-#start-purchase-link {
+#start-review-link, #main-sign-in-link {
     text-decoration: none;
     color: white;
 }
