@@ -5,15 +5,17 @@ from django.urls import reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
 
-from .forms import UserSignInForm, UserSignUpForm
-from .models import User
+from common.views import TitleMixin
+from users.forms import UserSignInForm, UserSignUpForm
+from users.models import User
 
 
-class UserSignUpView(SuccessMessageMixin, CreateView):
+class UserSignUpView(TitleMixin, SuccessMessageMixin, CreateView):
     """Registration page."""
 
     model = User
     form_class = UserSignUpForm
+    title = 'Flake review - Sign up'
     template_name = 'users/signup.html'
     success_message = 'You are successfully registered!'
 
@@ -23,9 +25,10 @@ class UserSignUpView(SuccessMessageMixin, CreateView):
         return reverse('users:user_profile', args=(self.object.id,))
 
 
-class UserSignInView(LoginView):
+class UserSignInView(TitleMixin, LoginView):
     """Login page."""
 
+    title = 'Flake review - Sign In'
     template_name = 'users/signin.html'
     authentication_form = UserSignInForm
 
@@ -34,10 +37,11 @@ class UserSignInView(LoginView):
         return reverse('users:user_profile', args=(self.request.user.id,))
 
 
-class UserProfileView(LoginRequiredMixin, DetailView):
+class UserProfileView(LoginRequiredMixin, TitleMixin, DetailView):
     """User profile page."""
 
     model = User
+    title = 'Flake review - profile'
     template_name = 'users/user_profile.html'
 
     def get_object(self, queryset=None):
