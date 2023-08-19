@@ -2,6 +2,7 @@ import subprocess  # nosec B404
 
 
 def run_flake8(file_path):
+    """Run python flake8 module for checking user file."""
     try:
         result = subprocess.run(
             ['flake8', file_path],
