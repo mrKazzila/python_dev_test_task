@@ -3,9 +3,20 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    """User manager."""
+    """User manager for User model."""
 
     def create_user(self, email, password=None, **extra_fields):
+        """
+        Create a regular user.
+
+        Args:
+            email: User's email address.
+            password: User's password.
+            extra_fields: Extra fields for the user.
+
+        Returns:
+            User: Created user object.
+        """
         if not email:
             raise ValueError('The Email field must be set')
 
@@ -17,6 +28,17 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
+        """
+        Create a superuser.
+
+        Args:
+            email: Superuser's email address.
+            password: Superuser's password.
+            extra_fields: Extra fields for the superuser.
+
+        Returns:
+            User: Created superuser object.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -32,8 +54,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     """User model."""
 
     email = models.EmailField(verbose_name='Email', unique=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(verbose_name='Active', default=True)
+    is_staff = models.BooleanField(verbose_name='Staff', default=False)
 
     objects = UserManager()
 

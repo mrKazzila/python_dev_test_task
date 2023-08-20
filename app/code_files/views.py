@@ -15,7 +15,7 @@ from code_files.models import UploadedFile
 from common.views import TitleMixin
 
 
-class FileManagementView(TitleMixin, LoginRequiredMixin, View):
+class FileManagementView(LoginRequiredMixin, TitleMixin, View):
     """View for managing user's uploaded files."""
 
     template_name = 'code_files/file_list.html'
@@ -26,7 +26,7 @@ class FileManagementView(TitleMixin, LoginRequiredMixin, View):
             return redirect('users:signin')
 
         form = FileUploadForm()
-        files = (UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-state'))
+        files = UploadedFile.objects.filter(user=request.user).order_by('-uploaded_at', '-state')
 
         files_with_checks = create_files_with_check_status(files=files)
         page_obj = create_paginator_obj(files=files_with_checks, page_number=request.GET.get('page'))
@@ -84,4 +84,5 @@ class DeleteFileView(LoginRequiredMixin, View):
             file_pk=file_id,
             user=request.user,
         )
+
         return redirect('code_files:file_list')

@@ -20,8 +20,6 @@ class UserSignUpView(TitleMixin, SuccessMessageMixin, CreateView):
     success_message = 'You are successfully registered!'
 
     def get_success_url(self):
-        print(f'{self.object.id}')
-        print(f'{self.object.email}')
         return reverse('users:user_profile', args=(self.object.id,))
 
 
@@ -33,7 +31,6 @@ class UserSignInView(TitleMixin, LoginView):
     authentication_form = UserSignInForm
 
     def get_success_url(self):
-        print(self.request.user.id)
         return reverse('users:user_profile', args=(self.request.user.id,))
 
 
