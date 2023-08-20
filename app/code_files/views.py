@@ -15,7 +15,7 @@ from code_files.models import UploadedFile
 from common.views import TitleMixin
 
 
-class FileManagementView(TitleMixin, LoginRequiredMixin, View):
+class FileManagementView(LoginRequiredMixin, TitleMixin, View):
     """View for managing user's uploaded files."""
 
     template_name = 'code_files/file_list.html'
