@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.core.paginator import Paginator
+from django.utils import timezone
 
 from code_checker.models import CodeCheck, CodeCheckStatus
 from code_files.models import FileState
@@ -85,7 +84,7 @@ def update_exist_file(old_file):
         old_file: The old file object to update.
     """
     old_file.state = FileState.OVERWRITTEN.value
-    old_file.uploaded_at = datetime.now()
+    old_file.uploaded_at = timezone.now()
     old_file.save()
 
     CodeCheck.objects.filter(file=old_file).update(status=CodeCheckStatus.UNCHECKED.value)
