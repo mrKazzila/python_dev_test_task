@@ -7,6 +7,15 @@ from code_files.models import FileState
 
 
 def create_files_with_check_status(files):
+    """
+    Create a list of tuples, each containing a file and its associated CodeCheck object.
+
+    Args:
+        files: A QuerySet of UploadedFile objects.
+
+    Returns:
+        list: A list of tuples, where each tuple contains an UploadedFile and its associated CodeCheck.
+    """
     files_with_checks = []
 
     for file in files:
@@ -21,8 +30,8 @@ def create_paginator_obj(files, page_number):
     Create a paginator object for the given list of files.
 
     Args:
-        files (list): List of files to be paginated.
-        page_number (int): The page number to retrieve.
+        files: List of files to be paginated.
+        page_number: The page number to retrieve.
 
     Returns:
         Page: The requested page of files.
@@ -65,7 +74,7 @@ def add_new_file(form, user, new_file_name):
 
     new_file.save()
 
-    (CodeCheck.objects.create(file=new_file, status=CodeCheckStatus.UNCHECKED.value))
+    CodeCheck.objects.create(file=new_file, status=CodeCheckStatus.UNCHECKED.value)
 
 
 def update_exist_file(old_file):
@@ -79,7 +88,7 @@ def update_exist_file(old_file):
     old_file.uploaded_at = datetime.now()
     old_file.save()
 
-    (CodeCheck.objects.filter(file=old_file).update(status=CodeCheckStatus.UNCHECKED.value))
+    CodeCheck.objects.filter(file=old_file).update(status=CodeCheckStatus.UNCHECKED.value)
 
 
 def delete_file(model, file_pk, user):

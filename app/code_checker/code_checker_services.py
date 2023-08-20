@@ -46,9 +46,24 @@ def generate_path_to_user_file(file_obj):
 
 
 def generate_check_log_massage(file_name, file_state, result_status_code, result_report, result_errors):
-    massage = f'[{datetime.now()}] Done checking for {file_name} with state {file_state}\n' \
-              f'[{datetime.now()}] Checking code {result_status_code}\n' \
-              f'[{datetime.now()}] Checking result: {result_report}\n' \
-              f'[{datetime.now()}] Checking errors: {result_errors}\n'
+    """
+    Generate a log message containing information about the code check results.
+
+    Args:
+        file_name: The name of the checked file.
+        file_state: The state of the checked file.
+        result_status_code: The status code of the code check.
+        result_report: The result report of the code check.
+        result_errors: Any errors encountered during the code check.
+
+    Returns:
+        A formatted log message with relevant information.
+    """
+    massage = (
+        f'[{datetime.now()}] Done checking for {file_name} with state {file_state}\n'
+        f'[{datetime.now()}] Checking code {result_status_code}\n'
+        f'[{datetime.now()}] Checking result: {result_report}\n'
+        f'[{datetime.now()}] Checking errors: {result_errors}\n'
+    )
 
     return massage

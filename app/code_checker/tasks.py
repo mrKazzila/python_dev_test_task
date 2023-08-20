@@ -81,7 +81,7 @@ def run_flake8_checker():
                     result_errors=stderr_,
                 )
 
-                (CheckLog.objects.update_or_create(code_check=code_check_obj, log_text=check_log_massage))
+                CheckLog.objects.update_or_create(code_check=code_check_obj, log_text=check_log_massage)
                 logger.info(f'Generate CheckLog with massage {check_log_massage}')  # down to debug
 
                 if stderr_ == '':
