@@ -16,7 +16,7 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'run-flake8-checker': {
-        'task': 'code_checker.tasks.run_flake8_checker',
-        'schedule': crontab(minute='*/2'),
+        'task': 'Run flake8 checker',
+        'schedule': crontab(minute='*/1'),  # TODO: change for real schedule time
     },
 }

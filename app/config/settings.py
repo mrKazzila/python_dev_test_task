@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'code_files.apps.CodeFilesConfig',
     'code_checker.apps.CodeCheckerConfig',
+    'email_sender.apps.EmailSenderConfig',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,10 @@ CACHES = {
 # Celery
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+
+# Email
+EMAIL_HOST = environ['EMAIL_HOST']
+EMAIL_PORT = environ['EMAIL_PORT']
+EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = environ['EMAIL_USE_TLS']
