@@ -31,6 +31,10 @@ class CodeCheck(models.Model):
         choices=[(status.name, status.value) for status in CodeCheckStatus],
         default=CodeCheckStatus.UNCHECKED.name,
     )
+    is_notified = models.BooleanField(
+        verbose_name='User is notified by email',
+        default=False,
+    )
 
     class Meta:
         verbose_name = 'Code Check'
