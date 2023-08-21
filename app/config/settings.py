@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'code_files.apps.CodeFilesConfig',
     'code_checker.apps.CodeCheckerConfig',
     'email_sender.apps.EmailSenderConfig',
+    'reports.apps.ReportsConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ TEMPLATES = [
             BASE_DIR / 'common',
             BASE_DIR / 'users',
             BASE_DIR / 'code_files',
+            BASE_DIR / 'reports',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -157,3 +159,4 @@ EMAIL_PORT = environ['EMAIL_PORT']
 EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = environ['EMAIL_USE_TLS']
+DOMAIN_NAME = environ['DOMAIN_NAME'] if not DEBUG else 'http://127.0.0.1:8000/'
