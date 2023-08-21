@@ -1,3 +1,4 @@
+import httpretty
 import pytest
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -30,15 +31,24 @@ class UserSignUpViewTest(BaseSetUp):
     def test_user_signup_success(self) -> None:
         """Test user signup page rendering and form instance."""
         url = reverse('users:signup')
-        data = {
+        form_data = {
             'email': 'test@example.com',
             'password1': 'testpassword',
             'password2': 'testpassword',
+            'g-recaptcha-response': 'test_response',
         }
-        response = self.client.post(url, data)
 
-        assert response.status_code == 302
-        assert User.objects.filter(email='test@example.com').exists()
+        with httpretty.enabled():
+            httpretty.register_uri(
+                httpretty.POST,
+                'https://www.google.com/recaptcha/api/siteverify',
+                body='{"success": true}',
+                content_type='application/json',
+            )
+
+            response = self.client.post(url, form_data)
+            assert response.status_code == 302
+            assert User.objects.filter(email='test@example.com').exists()
 
 
 class UserSignIpViewTest(BaseSetUp):
