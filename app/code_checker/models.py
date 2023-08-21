@@ -31,6 +31,11 @@ class CodeCheck(models.Model):
         choices=[(status.name, status.value) for status in CodeCheckStatus],
         default=CodeCheckStatus.UNCHECKED.name,
     )
+    last_check_result = models.TextField(
+        verbose_name='Last check result',
+        max_length=8000,
+        default='Without problems',
+    )
     is_notified = models.BooleanField(
         verbose_name='User is notified by email',
         default=False,
@@ -51,7 +56,7 @@ class CheckLog(models.Model):
     )
     log_text = models.TextField(
         verbose_name='Log message',
-        max_length=5000,
+        max_length=8000,
     )
     created_at = models.DateTimeField(
         verbose_name='Created At',
