@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     # Third party apps
     'crispy_forms',
+    'captcha',
 
     # My apps
     'common.apps.CommonConfig',
@@ -160,3 +161,8 @@ EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = environ['EMAIL_USE_TLS']
 DOMAIN_NAME = environ['DOMAIN_NAME'] if not DEBUG else 'http://127.0.0.1:8000/'
+
+# Recapcha
+RECAPTCHA_PUBLIC_KEY = environ['RECAPTCHA_PUBLIC_KEY']
+RECAPTCHA_PRIVATE_KEY = environ['RECAPTCHA_PRIVATE_KEY']
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
