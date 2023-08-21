@@ -1,3 +1,4 @@
+import httpretty
 import pytest
 from django.test import TestCase
 
@@ -19,15 +20,23 @@ class FormTest(TestCase):
     @pytest.mark.django_db
     def test_user_signup_form_valid(self) -> None:
         """Test that the UserSignUpForm is valid with correct data."""
-        form = UserSignUpForm(
-            data={
-                'email': 'test@example.com',
-                'password1': 'testpassword',
-                'password2': 'testpassword',
-            },
-        )
+        form_data = {
+            'email': 'test@example.com',
+            'password1': 'testpassword',
+            'password2': 'testpassword',
+            'g-recaptcha-response': 'test_response',
+        }
 
-        assert form.is_valid()
+        with httpretty.enabled():
+            httpretty.register_uri(
+                httpretty.POST,
+                'https://www.google.com/recaptcha/api/siteverify',
+                body='{"success": true}',
+                content_type='application/json',
+            )
+
+            form = UserSignUpForm(data=form_data)
+            assert form.is_valid()
 
     @pytest.mark.django_db
     def test_user_signin_form_invalid(self) -> None:

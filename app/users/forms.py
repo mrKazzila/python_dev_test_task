@@ -1,9 +1,11 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-from .models import User
+from users.models import User
 
 
 class UserSignInForm(AuthenticationForm):
@@ -70,9 +72,15 @@ class UserSignUpForm(UserCreationForm):
         }),
     )
 
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
+
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2')
+        fields = (
+            'email',
+            'password1',
+            'password2',
+        )
 
     def save(self, commit=True):
         user = super().save(commit=False)

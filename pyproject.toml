@@ -14,6 +14,7 @@ flower = "^2.0.0"
 django = "^4.2.4"
 django-redis = "^5.2.0"
 django-crispy-forms = "^1.14.0"
+django-recaptcha = "^3.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -31,6 +32,7 @@ flake8-builtins = "^2.1.0"
 flake8-commas = "^2.1.0"
 flake8-import-order = "^0.18.2"
 flake8-quotes = "^3.3.2"
+httpretty = "^1.1.4"
 
 
 [build-system]
