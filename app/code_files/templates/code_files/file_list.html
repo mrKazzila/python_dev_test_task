@@ -1,10 +1,6 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
-{% block css %}
-    <link href="{% static 'css/file_list.css' %}" rel="stylesheet">
-{% endblock %}
-
 {% block content %}
 <br>
 <br>
@@ -17,21 +13,21 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>File name</th>
-                        <th>Status</th>
-                        <th>Code check</th>
-                        <th>Actions</th>
+                        <th class="text-center">File name</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Code check</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if page_obj %}
                         {% for file, code_check in page_obj %}
                             <tr>
-                                <td>
+                                <td class="text-center">
                                     <span class="text-dark">{{ file.filename }}</span>
                                 </td>
 
-                                <td>
+                                <td class="text-center">
                                     {% if file.state == "New" %}
                                         <span class="text-danger">{{ file.state }}</span>
                                     {% elif file.state == "Overwritten" %}
@@ -41,10 +37,12 @@
                                     {% endif %}
                                 </td>
 
-                                <td>
+                                <td class="text-center">
                                     {% if code_check.status == "Done" %}
                                         <span class="text-success">
-                                            <a href="#" class="btn btn-info">Report available</a>
+                                            <a href="{% url 'reports:file_report' file.id %}" class="btn btn-success">
+                                                Report available
+                                            </a>
                                         </span>
                                     {% elif code_check.status == "In checking" %}
                                         <span class="text-warning">{{ code_check.status }}</span>
@@ -53,14 +51,14 @@
                                     {% endif %}
                                 </td>
 
-                                <td>
+                                <td class="text-center">
                                     <a href="{% url 'code_files:delete_file' file.id %}" class="btn btn-danger">Delete</a>
                                 </td>
 
                             </tr>
                         {% endfor %}
                     {% else %}
-                        <tr>
+                        <tr class="text-center">
                             <td colspan="4" class="text-muted">No files</td>
                         </tr>
                     {% endif %}
@@ -72,8 +70,8 @@
                     <span class="step-links">
 
                         {% if page_obj.has_previous %}
-                            <a href="?page=1" id="my-paginator-first-btn">&laquo; first</a>
-                            <a href="?page={{ page_obj.previous_page_number }}" id="my-paginator-previous-btn">previous</a>
+                            <a href="?page=1" class="btn btn-outline-dark">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">previous</a>
                         {% endif %}
 
                         <span class="current">
@@ -81,8 +79,8 @@
                         </span>
 
                         {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}" id="my-paginator-next-btn">next</a>
-                            <a href="?page={{ page_obj.paginator.num_pages }}" id="my-paginator-last-btn">last &raquo;</a>
+                            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">last &raquo;</a>
                         {% endif %}
 
                     </span>
@@ -97,7 +95,7 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button name="submit" type="submit" id="my-upload-file-btn">
+                <button name="submit" type="submit" class="btn btn-outline-success">
                     Upload
                 </button>
             </form>

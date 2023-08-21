@@ -56,8 +56,9 @@ class UserSignIpViewTest(BaseSetUp):
     @pytest.mark.django_db
     def test_user_signin_success(self) -> None:
         """Test successful user signin."""
-        user = User.objects.create_user(email='test@example.com', password='testpassword')
+        User.objects.create_user(email='test@example.com', password='testpassword')
         url = reverse('users:signin')
+
         data = {
             'email': 'test@example.com',
             'password': 'testpassword',
@@ -65,7 +66,7 @@ class UserSignIpViewTest(BaseSetUp):
         response = self.client.post(url, data)
 
         assert response.status_code == 302
-        assert response.url == reverse('users:user_profile', args=[user.id])
+        assert response.url == reverse('code_files:file_list')
 
 
 class UserProfileViewTest(BaseSetUp):

@@ -31,7 +31,7 @@ class UserSignInView(TitleMixin, LoginView):
     authentication_form = UserSignInForm
 
     def get_success_url(self):
-        return reverse('users:user_profile', args=(self.request.user.id,))
+        return reverse('code_files:file_list')
 
 
 class UserProfileView(LoginRequiredMixin, TitleMixin, DetailView):

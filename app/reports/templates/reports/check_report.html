@@ -1,0 +1,153 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-3">
+                <a href="{% url 'code_files:file_list' %}" class="btn btn-light">To the files</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+
+                <div class="card-header">
+                    <h3 class="card-title">Report: {{ file_obj.filename }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>Check Date: {{ report.0.check_date|date:"d.m.Y H:i" }}</p>
+                    <p>Status: {{ report.0.status }}</p>
+                    <p>Notified: {% if report.0.is_notified %}Yes{% else %}No{% endif %}</p>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h4 class="card-title">Check result</h4>
+                </div>
+
+                <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="table-header">
+                                    <th class="text-center align-middle ">Location</th>
+                                    <th class="text-center align-middle">Error code</th>
+                                    <th class="text-center align-middle">Error text</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in result_info %}
+                                    <tr>
+                                        <td class="align-middle">
+                                            <span class="text-success">{{ result.location }}</span>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="text-danger">{{ result.error_code }}</span>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="text-warning">{{ result.error_text }}</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+                <div class="card-footer">
+                    <div class="pagination justify-content-center">
+                        <span class="step-links">
+                            {% if result_info.has_previous %}
+                                <a href="?results_page=1" class="btn btn-outline-dark">&laquo; first</a>
+                                <a href="?results_page={{ result_info.previous_page_number }}"
+                                   class="btn btn-outline-dark">previous
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ result_info.number }} of {{ result_info.paginator.num_pages }}.
+                            </span>
+
+                            {% if result_info.has_next %}
+                                <a href="?results_page={{ result_info.next_page_number }}"
+                                   class="btn btn-outline-dark">next
+                                </a>
+                                <a href="?results_page={{ result_info.paginator.num_pages }}"
+                                   class="btn btn-outline-dark">last &raquo;
+                                </a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-4">
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">File Information</h4>
+                </div>
+                <div class="card-body">
+                    <p>Filename: {{ file_obj.filename }}</p>
+                    <p>Uploaded at: {{ file_obj.uploaded_at|date:"d.m.Y H:i" }}</p>
+                    <p>State: {{ file_obj.state }}</p>
+                    <p>Owner: {{ file_obj.user.email }}</p>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h4 class="card-title">Log history</h4>
+                </div>
+
+                <div class="card-body">
+                    <ul>
+                        {% for log in logs_info %}
+                            <li>
+                                [{{ log.created_at|date:"d.m.Y H:i:s" }}] {{ log.log_text }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                    <div class="card-footer">
+                        <div class="pagination justify-content-center">
+                            <span class="step-links">
+                                {% if logs_info.has_previous %}
+                                    <a href="?logs_page=1"
+                                       class="btn btn-outline-dark">&laquo; first
+                                    </a>
+                                    <a href="?logs_page={{ logs_info.previous_page_number }}"
+                                       class="btn btn-outline-dark">previous
+                                    </a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ logs_info.number }} of {{ logs_info.paginator.num_pages }}.
+                                </span>
+
+                                {% if logs_info.has_next %}
+                                    <a href="?logs_page={{ logs_info.next_page_number }}"
+                                       class="btn btn-outline-dark">next
+                                    </a>
+                                    <a href="?logs_page={{ logs_info.paginator.num_pages }}"
+                                       class="btn btn-outline-dark">last &raquo;
+                                    </a>
+                                {% endif %}
+                            </span>
+                        </div>
+                 </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

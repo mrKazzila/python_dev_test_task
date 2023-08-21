@@ -10,6 +10,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('users/', include('users.urls', namespace='users')),
     path('files/', include('code_files.urls', namespace='code_files')),
+    path('reports/', include('reports.urls', namespace='reports')),
 ]
 
 urlpatterns.extend(

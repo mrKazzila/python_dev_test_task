@@ -49,3 +49,7 @@ docker_run:
 
 docker_stop:
 	docker-compose -f docker-compose.yaml down -v
+
+docker_reload:
+	make docker_stop
+	make docker_run

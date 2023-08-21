@@ -1,4 +1,7 @@
 from code_checker.models import CheckLog, CodeCheck
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def add_info_about_email_send_to_log(email, code_check_objects_id):
@@ -9,3 +12,4 @@ def add_info_about_email_send_to_log(email, code_check_objects_id):
         code_check.save()
 
         CheckLog.objects.create(code_check=code_check, log_text=f'Send email for {email}')
+        logger.info('Add information to CheckLog about email send.')
