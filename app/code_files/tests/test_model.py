@@ -21,6 +21,7 @@ class TestUploadedFile(TestCase):
         """Clean up after the tests."""
         self.uploaded_file.file.delete()
         self.uploaded_file.delete()
+        self.user_instance.delete()
 
     def test_file_creation(self) -> None:
         """Test if an UploadedFile instance is created correctly."""

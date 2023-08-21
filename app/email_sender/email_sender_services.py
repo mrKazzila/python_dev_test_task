@@ -1,5 +1,6 @@
-from code_checker.models import CheckLog, CodeCheck
 import logging
+
+from code_checker.models import CheckLog, CodeCheck
 
 logger = logging.getLogger(__name__)
 
