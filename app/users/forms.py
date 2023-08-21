@@ -15,13 +15,13 @@ class UserSignInForm(AuthenticationForm):
 
     email = forms.CharField(
         widget=forms.EmailInput(attrs={
-            'class': 'form-control py-4',
+            'class': 'form-control',
             'placeholder': 'Email',
         }),
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'form-control py-4',
+            'class': 'form-control',
             'placeholder': 'Password',
         }),
     )
@@ -53,19 +53,19 @@ class UserSignUpForm(UserCreationForm):
 
     email = forms.CharField(
         widget=forms.EmailInput(attrs={
-            'class': 'form-control py-4',
+            'class': 'form-control',
             'placeholder': 'Email',
         }),
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'form-control py-4',
+            'class': 'form-control',
             'placeholder': 'Password',
         }),
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'form-control py-4',
+            'class': 'form-control',
             'placeholder': 'Confirm password',
         }),
     )
@@ -91,7 +91,7 @@ class UserProfileForm(UserChangeForm):
 
     email = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'form-control py-4',
+            'class': 'form-control',
             'readonly': True,
         }),
     )
