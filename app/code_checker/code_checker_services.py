@@ -1,8 +1,9 @@
 import logging
-from datetime import datetime
 from pathlib import Path
 
+from django.conf import settings
 from django.db.models import Q
+from django.utils import timezone
 
 from code_checker.models import CheckLog, CodeCheck, CodeCheckStatus
 from code_checker.utils import run_flake8
@@ -10,59 +11,6 @@ from code_files.models import FileState
 from config.settings import MEDIA_ROOT
 
 logger = logging.getLogger(__name__)
-
-
-def check_user_files(uploaded_files):
-    all_files_log_massages = []
-    code_checker_objects = []
-
-    for file_ in uploaded_files:
-        code_check_obj = CodeCheck.objects.filter(file=file_).first()
-        code_check_obj_id = code_check_obj.id
-        logger.debug(f'FILE {file_} STATUS {code_check_obj.status}')
-
-        CodeCheck.objects.filter(id=code_check_obj_id).update(is_notified=False)
-        code_checker_objects.append(code_check_obj_id)
-
-        if any(
-            [
-                code_check_obj.status == CodeCheckStatus.UNCHECKED.value,
-                code_check_obj.status == CodeCheckStatus.IN_CHECKING.value,
-            ],
-        ):
-
-            CodeCheck.objects.filter(id=code_check_obj_id).update(status=CodeCheckStatus.IN_CHECKING.value)
-
-            absolute_file_path, file_name = _generate_path_to_user_file(file_obj=file_)
-            logger.debug(f'Work with file: {absolute_file_path=}')
-
-            return_code, stdout_, stderr_ = run_flake8(file_path=absolute_file_path)
-
-            check_log_message_for_file = _generate_check_log_message(
-                file_name=file_name,
-                file_state=file_.state,
-                result_report=stdout_,
-            )
-            all_files_log_massages.append(check_log_message_for_file)
-
-            CheckLog.objects.update_or_create(code_check=code_check_obj, log_text=check_log_message_for_file)
-            logger.debug(f'Generate CheckLog with massage {check_log_message_for_file}')
-
-            if stderr_ == '':
-                logger.debug(f'RESULT return_code: {return_code}')
-                logger.debug(f'RESULT stdout: {stdout_}')
-                CodeCheck.objects.filter(id=code_check_obj_id).update(status=CodeCheckStatus.DONE.value)
-                file_.state = FileState.OLD.value
-
-            else:
-                logger.debug(f'RESULT stderr: {stderr_}')
-                CodeCheck.objects.filter(id=code_check_obj_id).update(status=CodeCheckStatus.UNCHECKED.value)
-
-            logger.debug(f'END FILE {file_name} STATUS {code_check_obj.status}')
-
-            file_.save()
-
-    return '\n'.join(all_files_log_massages), code_checker_objects
 
 
 def get_new_or_overwritten_user_files(upload_file_model, user):
@@ -84,6 +32,60 @@ def get_new_or_overwritten_user_files(upload_file_model, user):
     return files
 
 
+def check_user_files(uploaded_files):
+    checked_files = []
+    code_checker_objects = []
+
+    for file_ in uploaded_files:
+        code_check_obj = CodeCheck.objects.filter(file=file_).first()
+        code_check_obj_id = code_check_obj.id
+
+        CodeCheck.objects.filter(id=code_check_obj_id).update(is_notified=False)
+        code_checker_objects.append(code_check_obj_id)
+
+        if any(
+            [
+                code_check_obj.status == CodeCheckStatus.UNCHECKED.value,
+                code_check_obj.status == CodeCheckStatus.IN_CHECKING.value,
+            ],
+        ):
+
+            CodeCheck.objects.filter(id=code_check_obj_id).update(status=CodeCheckStatus.IN_CHECKING.value)
+
+            absolute_file_path, file_name = _generate_path_to_user_file(file_obj=file_)
+            logger.debug(f'Work with file: {absolute_file_path=}')
+
+            return_code, stdout_, stderr_ = run_flake8(file_path=absolute_file_path)
+            checked_files.append(file_name)
+
+            CheckLog.objects.create(
+                code_check=code_check_obj,
+                log_text=f'Code check for file {file_name} with state {file_.state} is done!',
+            )
+
+            if stderr_ == '':
+                logger.debug(f'RESULT return_code: {return_code}')
+                logger.debug(f'RESULT stdout: {stdout_}')
+                CodeCheck.objects.filter(id=code_check_obj_id).update(
+                    status=CodeCheckStatus.DONE.value,
+                    timestamp=timezone.now(),
+                    last_check_result=stdout_,
+                )
+
+                file_.state = FileState.OLD.value
+
+            else:
+                logger.debug(f'RESULT stderr: {stderr_}')
+                CodeCheck.objects.filter(id=code_check_obj_id).update(status=CodeCheckStatus.UNCHECKED.value)
+
+            logger.debug(f'END FILE {file_name} STATUS {code_check_obj.status}')
+
+            file_.save()
+
+    messages_for_email = _generate_message_for_email(files=checked_files)
+    return messages_for_email, code_checker_objects
+
+
 def _generate_path_to_user_file(file_obj):
     """
     Generate the absolute file path and file name for a given file object.
@@ -100,22 +102,26 @@ def _generate_path_to_user_file(file_obj):
     return absolute_file_path, file_name
 
 
-def _generate_check_log_message(file_name, file_state, result_report):
-    """
-    Generate a log message containing information about the code check results.
+def _generate_message_for_email(files):
+    files_page = 'files/list/'
+    file_info = _generate_str_with_checked_files(files)
 
-    Args:
-        file_name: The name of the checked file.
-        file_state: The state of the checked file.
-        result_report: The result report of the code check.
-
-    Returns:
-        A formatted log message with relevant information.
-    """
-    result = ' Without problems.' if result_report == '' else f'\n{result_report}'
     message = (
-        f'{file_name}.\n'
-        f'[{datetime.now()}] File state: {file_state}.\n'
-        f'[{datetime.now()}] Checking result:{result}\n'
+        f'We checked your code with flake8 for this {file_info}\n'
+        f'You can checked result in page {settings.DOMAIN_NAME}{files_page}\n\n'
+        f'Best regards!\n'
+        f'Flake review team.\n'
     )
+
     return message
+
+
+def _generate_str_with_checked_files(files):
+    if len(files) == 1:
+        checked_files = ''.join(files)
+        file_info = f'file {checked_files}'
+    else:
+        checked_files = ', '.join(files)
+        file_info = f'files {checked_files}'
+
+    return file_info
