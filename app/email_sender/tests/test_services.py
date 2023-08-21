@@ -20,11 +20,6 @@ class AddInfoAboutEmailSendToLogTest(TestCase):
             file=SimpleUploadedFile('test_file4.py', b'Test file content'),
             filename='test_file4.py',
         )
-        self.uploaded_file_2 = UploadedFile.objects.create(
-            user=self.user_instance,
-            file=SimpleUploadedFile('test_file.py', b'Test file content'),
-            filename='test_file.py',
-        )
         self.code_check = CodeCheck.objects.create(file=self.uploaded_file)
 
     def tearDown(self) -> None:
