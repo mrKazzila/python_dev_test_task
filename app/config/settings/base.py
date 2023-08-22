@@ -4,8 +4,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Path settings
-BASE_DIR = Path(__file__).resolve().parent.parent
-ROOT_DIR = BASE_DIR.resolve().parent
+CONFIG_DIR = Path(__file__).resolve().parent.parent
+APPS_DIR = CONFIG_DIR.resolve().parent
+ROOT_DIR = APPS_DIR.resolve().parent
 ENV_DIR = Path(ROOT_DIR / 'env').resolve()
 
 # Load env from file
@@ -16,6 +17,21 @@ load_dotenv(dotenv_path=dotenv_path)
 DEBUG = environ['DJANGO_DEBUG']
 SECRET_KEY = environ['DJANGO_SECRET_KEY']
 ALLOWED_HOSTS = environ['DJANGO_ALLOWED_HOSTS'].split(',')
+DOMAIN_NAME = environ['DOMAIN_NAME'] if not DEBUG else 'http://127.0.0.1:8000/'
+
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = ROOT_DIR / 'static'
+STATICFILES_DIRS = (APPS_DIR / 'static',)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = APPS_DIR / 'media'
+
+# Users
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
+LOGIN_URL = '/users/signin/'
+LOGIN_REDIRECT_URL = '/index/'
+LOGOUT_REDIRECT_URL = '/users/signin/'
 
 # Application definition
 INSTALLED_APPS = [
@@ -55,10 +71,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'common',
-            BASE_DIR / 'users',
-            BASE_DIR / 'code_files',
-            BASE_DIR / 'reports',
+            APPS_DIR / 'common',
+            APPS_DIR / 'users',
+            APPS_DIR / 'code_files',
+            APPS_DIR / 'reports',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -73,18 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': environ['DATABASE_ENGINE'],
-        'NAME': environ['DATABASE_NAME'],
-        'USER': environ['DATABASE_USER'],
-        'PASSWORD': environ['DATABASE_PASSWORD'],
-        'HOST': environ['DATABASE_HOST'],
-        'PORT': environ['DATABASE_PORT'],
-    },
-}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -114,56 +118,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
-STATIC_URL = '/static/'
-STATIC_ROOT = ROOT_DIR / 'static'
-STATICFILES_DIRS = (BASE_DIR / 'static',)
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Users
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
-LOGIN_URL = '/users/signin/'
-LOGIN_REDIRECT_URL = '/index/'
-LOGOUT_REDIRECT_URL = '/users/signin/'
 
 SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-# Redis
-REDIS_HOST = environ['REDIS_HOST']
-REDIS_PORT = environ['REDIS_PORT']
-
-# Cache
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
-    },
-}
-
-# Celery
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
-CELERY_SCHEDULE_TIME_MINUTES = environ['CELERY_SCHEDULE_TIME_MINUTES']
-
-# Email
-EMAIL_HOST = environ['EMAIL_HOST']
-EMAIL_PORT = environ['EMAIL_PORT']
-EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
-EMAIL_USE_TLS = environ['EMAIL_USE_TLS']
-DOMAIN_NAME = environ['DOMAIN_NAME'] if not DEBUG else 'http://127.0.0.1:8000/'
-
-# Recapcha
-RECAPTCHA_PUBLIC_KEY = environ['RECAPTCHA_PUBLIC_KEY']
-RECAPTCHA_PRIVATE_KEY = environ['RECAPTCHA_PRIVATE_KEY']
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
