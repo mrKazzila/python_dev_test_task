@@ -71,13 +71,13 @@ docker_reload:
 
 # Prod
 docker_prod_run:
-	docker-compose -f docker-compose.yaml up -d --build
+	docker-compose -f docker-compose.prod.yaml up -d --build
 
 docker_prod_stop:
-	docker-compose -f docker-compose.yaml down
+	docker-compose -f docker-compose.prod.yaml down
 
 docker_prod_stop_remove_volumes:
-	docker-compose -f docker-compose.yaml down -v
+	docker-compose -f docker-compose.prod.yaml down -v
 
 enter_to_container_name:
 	docker-compose -f docker-compose.prod.yaml exec $(name) bash
