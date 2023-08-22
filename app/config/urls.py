@@ -11,6 +11,7 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     path('files/', include('code_files.urls', namespace='code_files')),
     path('reports/', include('reports.urls', namespace='reports')),
+    path('', include('django_prometheus.urls')),
 ]
 
 urlpatterns.extend(
