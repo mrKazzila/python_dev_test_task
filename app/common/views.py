@@ -16,4 +16,4 @@ class IndexView(TitleMixin, TemplateView):
     """Main page."""
 
     template_name = 'common/index.html'
-    title = 'CodeReview'
+    title = 'Flake review'
