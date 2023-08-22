@@ -76,11 +76,7 @@ class UserSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = (
-            'email',
-            'password1',
-            'password2',
-        )
+        fields = ('email', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)
