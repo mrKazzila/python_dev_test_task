@@ -19,14 +19,12 @@ class UserTest(TestCase):
         assert 'is_superuser' in fields
         assert 'is_staff' in fields
 
-    @pytest.mark.django_db
     def test_user_str(self) -> None:
         """Test the __str__ method of the User model."""
         user = User.objects.create_user(email='mrrobot@example.com', password='testpassword')
 
         assert str(user) == 'mrrobot@example.com'
 
-    @pytest.mark.django_db
     def test_user_can_be_created_with_email(self) -> None:
         """Test creating a user with email."""
         user = User.objects.create_user(email='mrrobot@example.com', password='password')
@@ -36,13 +34,11 @@ class UserTest(TestCase):
         assert not user.is_staff
         assert not user.is_superuser
 
-    @pytest.mark.django_db
     def test_create_user_no_email(self) -> None:
         """Test that creating a user with no email raises a ValueError."""
         with pytest.raises(ValueError):
             User.objects.create_user(email=None, password='password')
 
-    @pytest.mark.django_db
     def test_user_cannot_be_created_with_no_unique_email(self) -> None:
         """Test that creating a user with a non-unique email raises an IntegrityError."""
         User.objects.create_user(email='mrrobot@example.com', password='password')
@@ -50,7 +46,6 @@ class UserTest(TestCase):
         with pytest.raises(IntegrityError):
             User.objects.create_user(email='mrrobot@example.com', password='password')
 
-    @pytest.mark.django_db
     def test_create_superuser(self) -> None:
         """Test creating a superuser."""
         admin_user = User.objects.create_superuser(email='admin@example.com', password='adminpassword')
@@ -60,7 +55,6 @@ class UserTest(TestCase):
         assert admin_user.is_staff
         assert admin_user.is_superuser
 
-    @pytest.mark.django_db
     def test_create_superuser_not_staff(self) -> None:
         """Test that creating a superuser with is_staff=False raises a ValueError."""
         with pytest.raises(ValueError):
@@ -70,7 +64,6 @@ class UserTest(TestCase):
                 is_staff=False,
             )
 
-    @pytest.mark.django_db
     def test_create_superuser_not_superuser(self) -> None:
         """Test that creating a superuser with is_superuser=False raises a ValueError."""
         with pytest.raises(ValueError):

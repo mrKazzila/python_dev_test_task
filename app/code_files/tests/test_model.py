@@ -21,16 +21,29 @@ class TestUploadedFile(TestCase):
         """Clean up after the tests."""
         self.uploaded_file.file.delete()
         self.uploaded_file.delete()
-        self.user_instance.delete()
 
     def test_file_creation(self) -> None:
-        """Test if an UploadedFile instance is created correctly."""
-        assert str(self.uploaded_file) == f'user_{self.user_id}/code/test_file4.py'
-        assert self.uploaded_file.state == FileState.NEW.value
+        """Test if an UploadedFile file is created correctly."""
+        new_file = UploadedFile.objects.create(
+            user=self.user_instance,
+            file=SimpleUploadedFile('test_file555.py', b'Test file content'),
+        )
+
+        assert str(new_file) == f'user_{self.user_id}/code/test_file555.py'
+        assert new_file.state == FileState.NEW.value
+
+        new_file.file.delete()
 
     def test_str_method(self) -> None:
         """Test the __str__ method of the UploadedFile model."""
-        assert str(self.uploaded_file) == f'user_{self.user_id}/code/test_file4.py'
+        new_file = UploadedFile.objects.create(
+            user=self.user_instance,
+            file=SimpleUploadedFile('test_file888.py', b'Test file content'),
+        )
+
+        assert str(new_file) == f'user_{self.user_id}/code/test_file888.py'
+
+        new_file.file.delete()
 
     def test_default_state(self) -> None:
         """Test the default state of a newly created UploadedFile."""

@@ -18,8 +18,8 @@ from common.views import TitleMixin
 class FileManagementView(LoginRequiredMixin, TitleMixin, View):
     """View for managing user's uploaded files."""
 
-    template_name = 'code_files/file_list.html'
     title = 'Flake review - user files'
+    template_name = 'code_files/file_list.html'
 
     def get(self, request):
         if request.user.id is None:

@@ -24,22 +24,27 @@ class FileReportView(LoginRequiredMixin, TitleMixin, DetailView):
         file_obj = self.get_object()
 
         code_checks = CodeCheck.objects.filter(file=file_obj)
-        report = generate_report_info(code_checks=code_checks)
+        reports = generate_report_info(code_checks=code_checks)
 
         result_info = create_paginator(
             request=self.request,
             page_count=5,
-            obj=report[0].get('results'),
+            obj=reports[0].get('results'),
             prefix='results',
         )
         logs_info = create_paginator(
             request=self.request,
             page_count=2,
-            obj=report[0].get('logs'),
+            obj=reports[0].get('logs'),
             prefix='logs',
         )
 
-        my_cont = generate_context(file_obj, report, result_info, logs_info)
+        my_context = generate_context(
+            file_obj=file_obj,
+            report=reports,
+            result_info=result_info,
+            logs_info=logs_info,
+        )
 
-        context.update(my_cont)
+        context.update(my_context)
         return context

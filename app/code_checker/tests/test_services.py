@@ -9,7 +9,7 @@ from code_checker.code_checker_services import (
     _generate_message_for_email,
     _generate_path_to_user_file,
     _generate_str_with_checked_files,
-    get_new_or_overwritten_user_files,
+    get_users_files_with_new_or_overwritten_state,
 )
 from code_checker.models import CodeCheck
 from code_checker.utils import run_flake8
@@ -47,8 +47,8 @@ class TestCodeCheckerServices(TestCase):
         assert stdout == ''
         assert stderr == ''
 
-    def test_get_new_or_overwritten_user_files(self) -> None:
-        """Test get_new_or_overwritten_user_files function return only NEW and OVERWRITTEN files."""
+    def test_get_users_files_with_new_or_overwritten_state(self) -> None:
+        """Test get_users_files_with_new_or_overwritten_state function return only NEW and OVERWRITTEN files."""
         uploaded_file1 = UploadedFile.objects.create(
             file=SimpleUploadedFile('test_file1.py', b'Test file content'),
             user=self.user_instance,
@@ -65,12 +65,16 @@ class TestCodeCheckerServices(TestCase):
             state=FileState.OLD.value,
         )
 
-        files = get_new_or_overwritten_user_files(UploadedFile, self.user_instance)
+        users_with_files = get_users_files_with_new_or_overwritten_state()
+        assert users_with_files.count() == 1
 
-        assert uploaded_file1 in files
-        assert uploaded_file2 in files
+        get_user_with_files = users_with_files[0]
 
-        assert uploaded_file3 not in files
+        assert get_user_with_files.email == self.user_instance.email
+
+        assert uploaded_file1 in get_user_with_files.filtered_files
+        assert uploaded_file2 in get_user_with_files.filtered_files
+        assert uploaded_file3 not in get_user_with_files.filtered_files
 
         uploaded_file1.file.delete()
         uploaded_file2.file.delete()
@@ -95,8 +99,8 @@ def test_generate_message_for_email() -> None:
 @pytest.mark.parametrize(
     'files, expected_result',
     [
-        (['test_file1.py', 'test_file2.py'], 'files test_file1.py, test_file2.py'),
-        (['test_file1.py'], 'file test_file1.py'),
+        (['test_file1.py', 'test_file2.py'], 'files: test_file1.py, test_file2.py.'),
+        (['test_file1.py'], 'file test_file1.py.'),
     ],
 )
 def test_generate_str_with_checked_files(files, expected_result) -> None:

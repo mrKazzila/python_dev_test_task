@@ -1,5 +1,4 @@
 import httpretty
-import pytest
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -18,7 +17,6 @@ class BaseSetUp(TestCase):
 class UserSignUpViewTest(BaseSetUp):
     """Test cases for the UserSignUpView."""
 
-    @pytest.mark.django_db
     def test_user_signup(self) -> None:
         """Test user signup page rendering and form instance."""
         url = reverse('users:signup')
@@ -27,7 +25,6 @@ class UserSignUpViewTest(BaseSetUp):
         assert response.status_code == 200
         assert isinstance(response.context['form'], UserSignUpForm)
 
-    @pytest.mark.django_db
     def test_user_signup_success(self) -> None:
         """Test user signup page rendering and form instance."""
         url = reverse('users:signup')
@@ -54,7 +51,6 @@ class UserSignUpViewTest(BaseSetUp):
 class UserSignIpViewTest(BaseSetUp):
     """Test cases for the UserSignInView."""
 
-    @pytest.mark.django_db
     def test_user_signin_view(self) -> None:
         """Test user signin page rendering and form instance."""
         url = reverse('users:signin')
@@ -63,7 +59,6 @@ class UserSignIpViewTest(BaseSetUp):
         assert response.status_code == 200
         assert isinstance(response.context['form'], UserSignInForm)
 
-    @pytest.mark.django_db
     def test_user_signin_success(self) -> None:
         """Test successful user signin."""
         User.objects.create_user(email='test@example.com', password='testpassword')
@@ -82,7 +77,6 @@ class UserSignIpViewTest(BaseSetUp):
 class UserProfileViewTest(BaseSetUp):
     """Test cases for the UserProfileView."""
 
-    @pytest.mark.django_db
     def test_user_profile(self) -> None:
         """Test user profile page rendering and user details display."""
         user = User.objects.create_user(email='test@example.com', password='testpassword')
@@ -95,7 +89,6 @@ class UserProfileViewTest(BaseSetUp):
         assert response.context['object'] == user.id
         assert str(response.context.get('user')) == user.email
 
-    @pytest.mark.django_db
     def test_user_profile_displayed_only_auth_user_info(self) -> None:
         """Test that the user profile displays only the authorized user's information."""
         user = User.objects.create_user(email='test@example.com', password='testpassword')
