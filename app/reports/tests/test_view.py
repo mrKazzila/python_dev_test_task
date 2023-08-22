@@ -8,6 +8,7 @@ from users.models import User
 
 
 class TestFileReportView(TestCase):
+    """Test cases for the FileReportView."""
 
     def setUp(self) -> None:
         """Set up the client for testing."""
@@ -62,6 +63,7 @@ class TestFileReportView(TestCase):
         response = self.client.get(reverse('reports:file_report', kwargs={'file_id': self.uploaded_file.pk}))
 
         assert response.status_code == 200
+
         report = response.context['report']
         result_info = response.context['result_info']
         logs_info = response.context['logs_info']

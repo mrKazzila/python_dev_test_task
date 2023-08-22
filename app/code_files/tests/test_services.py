@@ -102,12 +102,9 @@ class TestCodeFilesServices(TestCase):
 
     def test_create_files_with_check_status(self) -> None:
         """Test creating files with associated check statuses using the create_files_with_check_status service."""
-        file_1 = SimpleUploadedFile('file3.py', b'file_content', content_type='text/plain')
-        file_2 = SimpleUploadedFile('file4.py', b'file_content', content_type='text/plain')
-
         file_obj_1 = UploadedFile.objects.create(
             user=self.user,
-            file=file_1,
+            file=SimpleUploadedFile('file3.py', b'file_content', content_type='text/plain'),
             filename='file3.py',
             state=FileState.NEW.value,
         )
@@ -115,7 +112,7 @@ class TestCodeFilesServices(TestCase):
 
         file_obj_2 = UploadedFile.objects.create(
             user=self.user,
-            file=file_2,
+            file=SimpleUploadedFile('file4.py', b'file_content', content_type='text/plain'),
             filename='file4.py',
             state=FileState.NEW.value,
         )
@@ -123,6 +120,8 @@ class TestCodeFilesServices(TestCase):
 
         files = UploadedFile.objects.filter(user=self.user).order_by('-uploaded_at', '-state')
         files_with_checks = create_files_with_check_status(files=files)
+
+        print(f'TTTSSTS {files_with_checks[:2]}')
 
         for file_, code_check_ in files_with_checks[:2]:
             assert isinstance(file_, UploadedFile)

@@ -5,12 +5,12 @@ import pytest
 from django.core.paginator import Paginator
 
 from reports.reports_services import (
+    _extract_error_components,
+    _generate_result_report,
+    _parse_row_result,
     create_paginator,
-    extract_error_components,
     generate_context,
     generate_report_info,
-    generate_result_report,
-    parse_row_result,
 )
 
 
@@ -32,6 +32,7 @@ def mock_check_log():
 
 
 class ReportServicesTest:
+    """Test cases for the reports services."""
 
     @patch('code_checker.models.CheckLog.objects.filter')
     def test_generate_report_info(self, mock_filter, mock_code_check, mock_check_log) -> None:
@@ -52,7 +53,7 @@ class ReportServicesTest:
         """Test generating a result report."""
         row = 'Without problems'
 
-        report = generate_result_report(row_result=row)
+        report = _generate_result_report(row_result=row)
 
         assert len(report) == 1
         assert report[0].error_text == 'Without problems'
@@ -61,7 +62,7 @@ class ReportServicesTest:
         """Test parsing a row result into lines."""
         row = 'Line 1\nLine 2\nLine 3'
 
-        lines = parse_row_result(row_result=row)
+        lines = _parse_row_result(row_result=row)
 
         assert len(lines) == 3
         assert lines[0] == 'Line 1'
@@ -75,7 +76,7 @@ class ReportServicesTest:
         error_code_match_pattern = re.compile(r'^.*:\d+:\d+:\s*([A-Z]\d+)\s')
         error_text_match_pattern = re.compile(r'^.*:\d+:\d+:\s*[A-Z]\d+\s(.+)')
 
-        location, error_code, error_text = extract_error_components(
+        location, error_code, error_text = _extract_error_components(
             line=line,
             location_regex=location_match_pattern,
             error_code_regex=error_code_match_pattern,
