@@ -102,6 +102,5 @@ services:
       - "3000:3000"
     volumes:
       - ./persistentdata/grafana/storage:/var/lib/grafana
-#      - ./persistentdata/grafana/configs:/etc/grafana
     depends_on:
         - prometheus

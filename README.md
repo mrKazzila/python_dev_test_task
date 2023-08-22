@@ -51,7 +51,7 @@ To clone and run this project, you'll need:
 
 <details>
 
-<summary><strong>Use Docker</strong></summary>
+<summary><strong>Local run use Docker</strong></summary>
 
 1. Firstly clone repo
    ```bash
@@ -77,7 +77,7 @@ To clone and run this project, you'll need:
 
 <details>
 
-<summary>Other useful commands</summary>
+<summary>Other useful local commands</summary>
 
 1. Run tests
    ```bash
@@ -92,6 +92,44 @@ To clone and run this project, you'll need:
 3. Reload docker
    ```bash
    make docker_reload
+   ```
+
+</details>
+
+
+<details>
+
+<summary>Base deploy command</summary>
+
+0. Prepare you server
+ - Updating local packages: `sudo apt-get update && apt-get upgrade -y`
+ - Recommended: Create a new user `adduser <username>` & `usermod -aG sudo <username>`
+ - Recommended: Copy SSH-key to server
+ - Recommended: Update sshd_config
+ - [Install docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
+ - Install make `sudo apt-get install make`
+ - [Setup UFW](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-18-04-ru)
+
+1. Prepare env with make
+   ```bash
+   make prepare_env
+   ```
+2. Update the information in the .env files
+
+3. Run docker compose prod with make
+   ```bash
+   make docker_prod_run
+   ```
+4. Enter to django container
+   ```bash
+   make django_container_enter
+   ```
+
+- Other useful prod commands
+
+1. Clean all
+   ```bash
+   make docker_remove_all_force
    ```
 
 </details>
