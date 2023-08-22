@@ -17,6 +17,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'run-flake8-checker': {
         'task': 'Run flake8 checker',
-        'schedule': crontab(minute='*/1'),  # TODO: change for real schedule time
+        'schedule': crontab(minute=settings.CELERY_SCHEDULE_TIME_MINUTES),  # TODO: change for real schedule time
     },
 }
