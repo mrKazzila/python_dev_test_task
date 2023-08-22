@@ -1,7 +1,3 @@
-# python_dev_test_task
-Test task for python developer role at Skyeng
-
-
 <h1 align="center">
   <br>
   Code checker
@@ -31,13 +27,11 @@ Test task for python developer role at Skyeng
 
 ## Features
 * Registration new user
-  - Verification with e-mail
 * Authorisation
-  - Also, authorisation with GitHub account
-* Change profile settings
-* Add goods into cart
-* Fake buying
-* History orders
+* Uploading python files
+* Checking user uploaded python files with flake8, scheduled check via celery
+* Sending an email message to the user about the results of checking the files he has uploaded
+* Creating a report for the user based on the inspection
 
 
 ## Tech stack
@@ -55,13 +49,54 @@ To clone and run this project, you'll need:
 - [Poetry](https://python-poetry.org/docs/#installation)
 
 
+<details>
+
+<summary><strong>Use Docker</strong></summary>
+
+1. Firstly clone repo
+   ```bash
+   git clone git@github.com:mrKazzila/python_dev_test_task.git
+   ```
+
+2. Prepare env with make
+   ```bash
+   make prepare_env
+   ```
+
+3. Run docker compose with make
+   ```bash
+   make docker_run
+   ```
+
+4. Stop docker compose with make
+   ```bash
+   make docker_stop
+   ```
+
+</details>
+
+<details>
+
+<summary>Other useful commands</summary>
+
+1. Run tests
+   ```bash
+   make test
+   ```
+
+2. Run linters & formatters
+   ```bash
+   make test_linters
+   ```
+
+3. Reload docker
+   ```bash
+   make docker_reload
+   ```
+
+</details>
+
+
+
 ## Additional material
 [test-assignment](readme/Тестовое%20задание%20на%20вакансию%20Python-разработчик.pdf)
-
-<br>
-<br>
-<p align="center">
-  <a href="https://github.com/mrKazzila">GitHub</a> •
-  <a href="https://mrkazzila.github.io/resume/">Resume</a> •
-  <a href="https://www.linkedin.com/in/i-kazakov/">LinkedIn</a>
-</p>
