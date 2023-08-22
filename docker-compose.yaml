@@ -81,3 +81,27 @@ services:
       - "5555:5555"
     depends_on:
       - redis
+
+  prometheus:
+    container_name: local-prometheus
+    build:
+      context: docker/prometheus
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./persistentdata/prometheus:/prometheus
+    depends_on:
+      - django
+
+  grafana:
+    container_name: local-grafana
+    restart: unless-stopped
+    image: grafana/grafana:9.5.8
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./persistentdata/grafana/storage:/var/lib/grafana
+#      - ./persistentdata/grafana/configs:/etc/grafana
+    depends_on:
+        - prometheus
