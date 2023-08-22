@@ -290,6 +290,21 @@ files = [
 ]
 
 [[package]]
+name = "django-prometheus"
+version = "2.3.1"
+description = "Django middlewares to monitor your application with Prometheus.io."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-prometheus-2.3.1.tar.gz", hash = "sha256:f9c8b6c780c9419ea01043c63a437d79db2c33353451347894408184ad9c3e1e"},
+    {file = "django_prometheus-2.3.1-py2.py3-none-any.whl", hash = "sha256:cf9b26f7ba2e4568f08f8f91480a2882023f5908579681bcf06a4d2465f12168"},
+]
+
+[package.dependencies]
+prometheus-client = ">=0.7"
+
+[[package]]
 name = "django-recaptcha"
 version = "3.0.0"
 description = "Django recaptcha form field/widget app."
@@ -1250,4 +1265,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "98d28b9285c79081b1c28c2f3124500bfbae8e4291a4368af3a4dcb95c99894d"
+content-hash = "514900bfd4e830ac36dca39d734d48fdeb27eab8d3a43ca94c90a0647bebf43d"
