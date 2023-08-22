@@ -1,0 +1,85 @@
+version: '3'
+
+services:
+  django:
+    restart: always
+    container_name: django3-python3.11
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn --chdir app config.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    env_file:
+      - env/.env
+    volumes:
+      - ./persistentdata/static:/home/unprivilegeduser/code/static
+      - ./persistentdata/media:/home/unprivilegeduser/code/media
+    depends_on:
+      - postgres
+      - redis
+      - celery
+
+  postgres:
+    restart: always
+    container_name: postgres-15.3
+    image: postgres:15.3
+    env_file:
+      - env/.env.db
+    volumes:
+      - ./persistentdata/db:/var/lib/postgresql/data/
+
+  redis:
+    restart: always
+    container_name: redis-7.0.5
+    image: redis:7.0.5-alpine
+    hostname: redis
+
+  celery:
+    restart: always
+    container_name: celery_worker-5.2.7
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - env/.env
+    environment:
+      - REDIS_HOST=redis
+    entrypoint: celery
+    command: --workdir=./app -A config worker --loglevel=info
+    volumes:
+      - ./persistentdata/media:/home/unprivilegeduser/code/media
+    depends_on:
+      - redis
+
+  celery-beat:
+      container_name: local-celery-beat
+      build:
+        context: .
+        dockerfile: Dockerfile
+      env_file:
+        - env/.env
+      environment:
+        - REDIS_HOST=redis
+      entrypoint: celery
+      command: --workdir=./app -A config beat -l info
+      volumes:
+        - ./persistentdata/media:/home/unprivilegeduser/code/media
+      depends_on:
+        - redis
+
+  nginx:
+    restart: always
+    container_name: nginx-1.25
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./persistentdata/certbot/conf:/etc/letsencrypt
+      - ./persistentdata/certbot/www:/var/www/certbot
+      - ./persistentdata/static:/home/unprivilegeduser/code/static
+      - ./persistentdata/media:/home/unprivilegeduser/code/media
+    depends_on:
+      - django
