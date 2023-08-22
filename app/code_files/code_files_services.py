@@ -18,7 +18,7 @@ def create_files_with_check_status(files):
     files_with_checks = []
 
     for file in files:
-        code_check = (CodeCheck.objects.filter(file=file).first())
+        code_check = CodeCheck.objects.filter(file=file).first()
         files_with_checks.append((file, code_check))
 
     return files_with_checks
@@ -52,9 +52,9 @@ def return_old_file_name_if_file_exist(model, owner, file_name):
     Returns:
         True if the file exists, False otherwise.
     """
-    is_exist_file = (model.objects.filter(user=owner, filename__exact=file_name).first())
+    existing_file = model.objects.filter(user=owner, filename=file_name).first()
 
-    return is_exist_file
+    return existing_file if existing_file else None
 
 
 def add_new_file(form, user, new_file_name):
