@@ -21,6 +21,7 @@
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech stack</a> •
   <a href="#how-to-use">How To Use</a> •
+  <a href="https://mrkazzila.github.io/python_dev_test_task/">GitHub Pages</a> •
   <a href="#additional-material">Additional material</a>
 </p>
 
