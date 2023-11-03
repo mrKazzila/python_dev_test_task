@@ -7,6 +7,7 @@
 <h4 align="center">
     Test task for python developer role at Skyeng
     <br>
+    ❗Note: Project not supported❗
 </h4>
 
 <div align="center">
