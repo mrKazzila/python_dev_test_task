@@ -22,8 +22,8 @@
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech stack</a> •
   <a href="#how-to-use">How To Use</a> •
-  <a href="https://mrkazzila.github.io/test_task_2/">GitHub Pages</a> •
-  <a href="#additional-material">Additional material</a>
+  <a href="#additional-material">Additional material</a> •
+  <a href="https://mrkazzila.github.io/test_task_2/">GitHub Pages</a>
 </p>
 
 
